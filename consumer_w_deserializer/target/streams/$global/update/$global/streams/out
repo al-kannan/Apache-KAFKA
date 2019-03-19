@@ -3117,6 +3117,7 @@
 [0m[[0m[0mdebug[0m] [0m[0m	[NOT REQUIRED] org.scala-lang#scala-library;2.12.8!scala-library.jar[0m
 [0m[[0m[0mdebug[0m] [0m[0m	[NOT REQUIRED] org.apache.kafka#kafka_2.12;2.1.1!kafka_2.12.jar[0m
 [0m[[0m[0mdebug[0m] [0m[0m	[NOT REQUIRED] org.slf4j#slf4j-simple;1.7.5!slf4j-simple.jar[0m
+[0m[[0m[0mdebug[0m] [0m[0m	[NOT REQUIRED] org.apache.kafka#kafka-clients;2.1.1!kafka-clients.jar[0m
 [0m[[0m[0mdebug[0m] [0m[0m	[NOT REQUIRED] com.fasterxml.jackson.core#jackson-databind;2.9.8!jackson-databind.jar(bundle)[0m
 [0m[[0m[0mdebug[0m] [0m[0m	[NOT REQUIRED] net.sf.jopt-simple#jopt-simple;5.0.4!jopt-simple.jar[0m
 [0m[[0m[0mdebug[0m] [0m[0m	[NOT REQUIRED] com.yammer.metrics#metrics-core;2.2.0!metrics-core.jar[0m
@@ -3134,19 +3135,18 @@
 [0m[[0m[0mdebug[0m] [0m[0m	[NOT REQUIRED] org.scala-lang#scala-compiler;2.12.8!scala-compiler.jar[0m
 [0m[[0m[0mdebug[0m] [0m[0m	[NOT REQUIRED] org.scala-lang.modules#scala-xml_2.12;1.0.6!scala-xml_2.12.jar(bundle)[0m
 [0m[[0m[0mdebug[0m] [0m[0m	[NOT REQUIRED] jline#jline;2.14.6!jline.jar[0m
-[0m[[0m[0mdebug[0m] [0m[0m	[NOT REQUIRED] org.apache.kafka#kafka-clients;2.1.1!kafka-clients.jar[0m
-[0m[[0m[0mdebug[0m] [0m[0m:: resolution report :: resolve 408ms :: artifacts dl 11ms[0m
-[0m[[0m[0mdebug[0m] [0m[0m	report for kafkaproject#kafkaproject_2.12;1.0 compile produced in /home/ubuntu/sbt/consumer_w_deserializer/target/scala-2.12/resolution-cache/reports/kafkaproject-kafkaproject_2.12-compile.xml[0m
-[0m[[0m[0mdebug[0m] [0m[0m	report for kafkaproject#kafkaproject_2.12;1.0 runtime produced in /home/ubuntu/sbt/consumer_w_deserializer/target/scala-2.12/resolution-cache/reports/kafkaproject-kafkaproject_2.12-runtime.xml[0m
-[0m[[0m[0mdebug[0m] [0m[0m	report for kafkaproject#kafkaproject_2.12;1.0 test produced in /home/ubuntu/sbt/consumer_w_deserializer/target/scala-2.12/resolution-cache/reports/kafkaproject-kafkaproject_2.12-test.xml[0m
-[0m[[0m[0mdebug[0m] [0m[0m	report for kafkaproject#kafkaproject_2.12;1.0 provided produced in /home/ubuntu/sbt/consumer_w_deserializer/target/scala-2.12/resolution-cache/reports/kafkaproject-kafkaproject_2.12-provided.xml[0m
-[0m[[0m[0mdebug[0m] [0m[0m	report for kafkaproject#kafkaproject_2.12;1.0 optional produced in /home/ubuntu/sbt/consumer_w_deserializer/target/scala-2.12/resolution-cache/reports/kafkaproject-kafkaproject_2.12-optional.xml[0m
-[0m[[0m[0mdebug[0m] [0m[0m	report for kafkaproject#kafkaproject_2.12;1.0 compile-internal produced in /home/ubuntu/sbt/consumer_w_deserializer/target/scala-2.12/resolution-cache/reports/kafkaproject-kafkaproject_2.12-compile-internal.xml[0m
-[0m[[0m[0mdebug[0m] [0m[0m	report for kafkaproject#kafkaproject_2.12;1.0 runtime-internal produced in /home/ubuntu/sbt/consumer_w_deserializer/target/scala-2.12/resolution-cache/reports/kafkaproject-kafkaproject_2.12-runtime-internal.xml[0m
-[0m[[0m[0mdebug[0m] [0m[0m	report for kafkaproject#kafkaproject_2.12;1.0 test-internal produced in /home/ubuntu/sbt/consumer_w_deserializer/target/scala-2.12/resolution-cache/reports/kafkaproject-kafkaproject_2.12-test-internal.xml[0m
-[0m[[0m[0mdebug[0m] [0m[0m	report for kafkaproject#kafkaproject_2.12;1.0 plugin produced in /home/ubuntu/sbt/consumer_w_deserializer/target/scala-2.12/resolution-cache/reports/kafkaproject-kafkaproject_2.12-plugin.xml[0m
-[0m[[0m[0mdebug[0m] [0m[0m	report for kafkaproject#kafkaproject_2.12;1.0 pom produced in /home/ubuntu/sbt/consumer_w_deserializer/target/scala-2.12/resolution-cache/reports/kafkaproject-kafkaproject_2.12-pom.xml[0m
-[0m[[0m[0mdebug[0m] [0m[0m	report for kafkaproject#kafkaproject_2.12;1.0 scala-tool produced in /home/ubuntu/sbt/consumer_w_deserializer/target/scala-2.12/resolution-cache/reports/kafkaproject-kafkaproject_2.12-scala-tool.xml[0m
-[0m[[0m[0mdebug[0m] [0m[0m	resolve done (408ms resolve - 11ms download)[0m
+[0m[[0m[0mdebug[0m] [0m[0m:: resolution report :: resolve 427ms :: artifacts dl 12ms[0m
+[0m[[0m[0mdebug[0m] [0m[0m	report for kafkaproject#kafkaproject_2.12;1.0 compile produced in /home/ubuntu/sbt/Apache-KAFKA/consumer_w_deserializer/target/scala-2.12/resolution-cache/reports/kafkaproject-kafkaproject_2.12-compile.xml[0m
+[0m[[0m[0mdebug[0m] [0m[0m	report for kafkaproject#kafkaproject_2.12;1.0 runtime produced in /home/ubuntu/sbt/Apache-KAFKA/consumer_w_deserializer/target/scala-2.12/resolution-cache/reports/kafkaproject-kafkaproject_2.12-runtime.xml[0m
+[0m[[0m[0mdebug[0m] [0m[0m	report for kafkaproject#kafkaproject_2.12;1.0 test produced in /home/ubuntu/sbt/Apache-KAFKA/consumer_w_deserializer/target/scala-2.12/resolution-cache/reports/kafkaproject-kafkaproject_2.12-test.xml[0m
+[0m[[0m[0mdebug[0m] [0m[0m	report for kafkaproject#kafkaproject_2.12;1.0 provided produced in /home/ubuntu/sbt/Apache-KAFKA/consumer_w_deserializer/target/scala-2.12/resolution-cache/reports/kafkaproject-kafkaproject_2.12-provided.xml[0m
+[0m[[0m[0mdebug[0m] [0m[0m	report for kafkaproject#kafkaproject_2.12;1.0 optional produced in /home/ubuntu/sbt/Apache-KAFKA/consumer_w_deserializer/target/scala-2.12/resolution-cache/reports/kafkaproject-kafkaproject_2.12-optional.xml[0m
+[0m[[0m[0mdebug[0m] [0m[0m	report for kafkaproject#kafkaproject_2.12;1.0 compile-internal produced in /home/ubuntu/sbt/Apache-KAFKA/consumer_w_deserializer/target/scala-2.12/resolution-cache/reports/kafkaproject-kafkaproject_2.12-compile-internal.xml[0m
+[0m[[0m[0mdebug[0m] [0m[0m	report for kafkaproject#kafkaproject_2.12;1.0 runtime-internal produced in /home/ubuntu/sbt/Apache-KAFKA/consumer_w_deserializer/target/scala-2.12/resolution-cache/reports/kafkaproject-kafkaproject_2.12-runtime-internal.xml[0m
+[0m[[0m[0mdebug[0m] [0m[0m	report for kafkaproject#kafkaproject_2.12;1.0 test-internal produced in /home/ubuntu/sbt/Apache-KAFKA/consumer_w_deserializer/target/scala-2.12/resolution-cache/reports/kafkaproject-kafkaproject_2.12-test-internal.xml[0m
+[0m[[0m[0mdebug[0m] [0m[0m	report for kafkaproject#kafkaproject_2.12;1.0 plugin produced in /home/ubuntu/sbt/Apache-KAFKA/consumer_w_deserializer/target/scala-2.12/resolution-cache/reports/kafkaproject-kafkaproject_2.12-plugin.xml[0m
+[0m[[0m[0mdebug[0m] [0m[0m	report for kafkaproject#kafkaproject_2.12;1.0 pom produced in /home/ubuntu/sbt/Apache-KAFKA/consumer_w_deserializer/target/scala-2.12/resolution-cache/reports/kafkaproject-kafkaproject_2.12-pom.xml[0m
+[0m[[0m[0mdebug[0m] [0m[0m	report for kafkaproject#kafkaproject_2.12;1.0 scala-tool produced in /home/ubuntu/sbt/Apache-KAFKA/consumer_w_deserializer/target/scala-2.12/resolution-cache/reports/kafkaproject-kafkaproject_2.12-scala-tool.xml[0m
+[0m[[0m[0mdebug[0m] [0m[0m	resolve done (427ms resolve - 12ms download)[0m
 [0m[[0m[0minfo[0m] [0m[0mDone updating.[0m
 [0m[[0m[33mwarn[0m] [0m[0mThere may be incompatibilities among your library dependencies; run 'evicted' to see detailed eviction warnings.[0m

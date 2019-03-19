@@ -7,7 +7,7 @@
 		revision="1.0"
 		conf="runtime"
 		confs="compile, runtime, test, provided, optional, compile-internal, runtime-internal, test-internal, plugin, pom, scala-tool"
-		date="20190319001548"/>
+		date="20190319151942"/>
 	<dependencies>
 		<module organisation="org.slf4j" name="slf4j-simple">
 			<revision name="1.7.5" status="release" pubdate="20130325205226" resolver="sbt-chain" artresolver="sbt-chain" homepage="http://www.slf4j.org" downloaded="false" searched="false" default="false" conf="default, compile, runtime, default(compile), master" position="17">

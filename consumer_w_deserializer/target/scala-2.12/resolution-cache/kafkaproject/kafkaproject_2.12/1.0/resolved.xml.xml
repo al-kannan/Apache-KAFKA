@@ -4,7 +4,7 @@
 		module="kafkaproject_2.12"
 		revision="1.0"
 		status="integration"
-		publication="20190319021224"
+		publication="20190319155604"
 	>
 		<description>
 		KafkaProject
