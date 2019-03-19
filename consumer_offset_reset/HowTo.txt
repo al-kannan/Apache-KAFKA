@@ -1,0 +1,1 @@
+kafka-consumer-groups.sh --bootstrap-server kafka1:9092 --group my-first-application --topic console_topic --reset-offsets --to-earliest --execute

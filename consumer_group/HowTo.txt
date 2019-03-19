@@ -1,0 +1,9 @@
+Consumer Group is basically group of consumers consume a single topic with a consumer group id
+
+If a topic has 3 partitions, when you start the first consumer with a consumer group id of say "Grp 1" all three partitions will be assigned to this process
+
+When we start the next run of the same consumer group code on the same machine or on a different machine then Kafka will rebalance the consumers within the consumer group, you will see the log messages that partion 1 will be given to the new consumer within the same group
+
+If we start third one then a partition will be assigned 
+
+If we start the fourth will then since no extra partition is left, fourth session will sit idle
