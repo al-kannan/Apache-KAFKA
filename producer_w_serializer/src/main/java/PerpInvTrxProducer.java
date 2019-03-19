@@ -1,0 +1,45 @@
+import java.util.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import org.apache.kafka.clients.producer.*;
+
+public class PerpInvTrxProducer {
+
+	public static void main(String[] args) throws Exception{
+
+		String topicName = "kafka_topic";
+
+		Properties props = new Properties();
+		props.put("bootstrap.servers", "kafka1:9092,kafka2:9092");
+		props.put("key.serializer","org.apache.kafka.common.serialization.StringSerializer");
+		props.put("value.serializer", "PerpInvTrxSerializer");
+
+		Producer<String, PerpInvTrx> producer = new KafkaProducer<>(props);
+
+		DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		PerpInvTrx sp1 = new PerpInvTrx("Siteid1","PPO1","PMIX", df.parse("2019-04-01"), 100);
+		PerpInvTrx sp2 = new PerpInvTrx("Siteid1","PPO1","PMIX", df.parse("2019-04-01"), 200);
+
+		producer.send(new ProducerRecord<String,PerpInvTrx>(topicName,"Inv1",sp1)).get();
+		producer.send(new ProducerRecord<String,PerpInvTrx>(topicName,"Inv1",sp1)).get();
+		producer.send(new ProducerRecord<String,PerpInvTrx>(topicName,"Inv1",sp1)).get();
+		producer.send(new ProducerRecord<String,PerpInvTrx>(topicName,"Inv1",sp1)).get();
+		producer.send(new ProducerRecord<String,PerpInvTrx>(topicName,"Inv1",sp1)).get();
+		producer.send(new ProducerRecord<String,PerpInvTrx>(topicName,"Inv1",sp1)).get();
+		producer.send(new ProducerRecord<String,PerpInvTrx>(topicName,"Inv1",sp1)).get();
+		producer.send(new ProducerRecord<String,PerpInvTrx>(topicName,"Inv2",sp2)).get();
+		producer.send(new ProducerRecord<String,PerpInvTrx>(topicName,"Inv2",sp2)).get();
+		producer.send(new ProducerRecord<String,PerpInvTrx>(topicName,"Inv2",sp2)).get();
+		producer.send(new ProducerRecord<String,PerpInvTrx>(topicName,"Inv2",sp2)).get();
+		producer.send(new ProducerRecord<String,PerpInvTrx>(topicName,"Inv2",sp2)).get();
+		producer.send(new ProducerRecord<String,PerpInvTrx>(topicName,"Inv2",sp2)).get();
+		producer.send(new ProducerRecord<String,PerpInvTrx>(topicName,"Inv2",sp2)).get();
+		producer.send(new ProducerRecord<String,PerpInvTrx>(topicName,"Inv2",sp2)).get();
+		producer.send(new ProducerRecord<String,PerpInvTrx>(topicName,"Inv2",sp2)).get();
+		producer.send(new ProducerRecord<String,PerpInvTrx>(topicName,"Inv2",sp2)).get();
+
+		System.out.println("PerpInvTrx Producer Completed.");
+		producer.close();
+
+	}
+} 

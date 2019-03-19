@@ -1,0 +1,9 @@
+[0m[[0m[0mdebug[0m] [0m[0mFull compilation, no sources in previous analysis.[0m
+[0m[[0m[0mdebug[0m] [0m[0mAll sources are invalidated.[0m
+[0m[[0m[0mdebug[0m] [0m[0mRecompiling all 1 sources: invalidated sources (1) exceeded 50.0% of all sources[0m
+[0m[[0m[0minfo[0m] [0m[0mCompiling 1 Java source to /home/ubuntu/sbt/producer_w_get/target/scala-2.12/classes ...[0m
+[0m[[0m[0mdebug[0m] [0m[0mAttempting to call com.sun.tools.javac.api.JavacTool@5bdbab64 directly...[0m
+[0m[[0m[0mdebug[0m] [0m[0mJava compilation took 0.375591206 s[0m
+[0m[[0m[0mdebug[0m] [0m[0mJava analysis took 0.077741423 s[0m
+[0m[[0m[0mdebug[0m] [0m[0mJava compilation + analysis took 0.458348201 s[0m
+[0m[[0m[0minfo[0m] [0m[0mDone compiling.[0m

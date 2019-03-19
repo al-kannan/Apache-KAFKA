@@ -1,0 +1,617 @@
+Use aws region which has three AZs
+
+Subnet address shall be 172.31.0.0/20 for AZ1, 172.31.16.0/20 for AZ2 and 172.31.32.0/20 for AZ3
+
+Launch new EC2 instance on AZ1 and ensure public IP will be issued and private IP hardcode it to 172.31.9.1
+
+Use latest ubuntu linux
+
+Use default volume
+
+Make sure port 2888, 3888, 2181 are open to 172.31.0.0/16
+Make sure 2181 is open for you to connect from your laptop IP
+Make sure 22 port is open to ssh
+
+ssh into the machine
+
+run
+sudo apt-get update && \
+      sudo apt-get -y install wget ca-certificates zip net-tools vim nano tar netcat
+
+sudo apt-get -y install openjdk-8-jdk
+java -version
+
+sudo sysctl vm.swappiness=1
+echo 'vm.swappiness=1' | sudo tee --append /etc/sysctl.conf
+
+echo "172.31.9.1 kafka1
+172.31.9.1 zookeeper1
+172.31.19.230 kafka2
+172.31.19.230 zookeeper2
+172.31.35.20 kafka3
+172.31.35.20 zookeeper3" | sudo tee --append /etc/hosts
+
+wget http://apache.mirror.digitalpacific.com.au/kafka/0.10.2.2/kafka_2.12-0.10.2.2.tgz
+tar -xvzf kafka_2.12-0.10.2.2.tgz
+rm kafka_2.12-0.10.2.2.tgz
+mv kafka_2.12-0.10.2.2 kafka
+cd kafka/
+
+
+bin/zookeeper-server-start.sh config/zookeeper.properties
+
+check out the last line that says binding to 0.0.0.0
+press control c to get out
+
+bin/zookeeper-server-start.sh -daemon config/zookeeper.properties
+
+bin/zookeeper-shell.sh localhost:2181
+ls /
+you should get [zookeeper]
+press control c to get out
+
+echo "ruok" | nc localhost 2181 ; echo
+you should get imok
+
+sudo vi /etc/init.d/zookeeper
+copy below setup 
+----------------------
+#!/bin/sh
+#
+# zookeeper          Start/Stop zookeeper
+#
+# chkconfig: - 99 10
+# description: Standard script to start and stop zookeeper
+
+DAEMON_PATH=/home/ubuntu/kafka/bin
+DAEMON_NAME=zookeeper
+
+PATH=$PATH:$DAEMON_PATH
+
+# See how we were called.
+case "$1" in
+  start)
+        # Start daemon.
+        pid=`ps ax | grep -i 'org.apache.zookeeper' | grep -v grep | awk '{print $1}'`
+        if [ -n "$pid" ]
+          then
+            echo "Zookeeper is already running";
+        else
+          echo "Starting $DAEMON_NAME";
+          $DAEMON_PATH/zookeeper-server-start.sh -daemon /home/ubuntu/kafka/config/zookeeper.properties
+        fi
+        ;;
+  stop)
+        echo "Shutting down $DAEMON_NAME";
+        $DAEMON_PATH/zookeeper-server-stop.sh
+        ;;
+  restart)
+        $0 stop
+        sleep 2
+        $0 start
+        ;;
+  status)
+        pid=`ps ax | grep -i 'org.apache.zookeeper' | grep -v grep | awk '{print $1}'`
+        if [ -n "$pid" ]
+          then
+          echo "Zookeeper is Running as PID: $pid"
+        else
+          echo "Zookeeper is not Running"
+        fi
+        ;;
+  *)
+        echo "Usage: $0 {start|stop|restart|status}"
+        exit 1
+esac
+
+exit 0
+----------------------------------------------------------
+
+
+sudo chmod +x /etc/init.d/zookeeper
+sudo chown root:root /etc/init.d/zookeeper
+# you can safely ignore the warning
+sudo update-rc.d zookeeper defaults
+
+# stop zookeeper
+sudo service zookeeper stop
+
+# verify it's stopped
+nc -vz localhost 2181
+--note, you may get success, give more time the process will come down 
+
+# start zookeeper
+sudo service zookeeper start
+
+# verify it's started
+nc -vz localhost 2181
+echo "ruok" | nc localhost 2181 ; echo
+
+# check the logs
+cat logs/zookeeper.out
+
+--This concludes single node zookeeper setup
+
+--To setup a 3 node zookeeper quorum, stop the instance, create AMI and launch with two different IP address
+
+On AZ2 provide 172.31.19.230
+On AZ3 provide 172.31.35.20
+
+Then connect all three nodes and run 
+sudo service zookeeper start
+
+Then test in all three nodes for connectivity
+nc -vz zookeeper1 2181
+You should get success message from all three nodes
+nc -vz zookeeper2 2181
+You should get success message from all three nodes
+nc -vz zookeeper3 2181
+You should get success message from all three nodes
+
+Stop Zookeeper on all nodes
+sudo service zookeeper stop
+
+On each node 
+sudo mkdir -p /data/zookeeper
+sudo chown -R ubuntu:ubuntu /data/
+
+On node 1
+echo "1" > /data/zookeeper/myid
+
+On node 2
+echo "2" > /data/zookeeper/myid
+
+On node 3
+echo "3" > /data/zookeeper/myid
+
+On all nodes
+rm /home/ubuntu/ubuntu/kafka/config/zookeeper.properties
+
+On all nodes
+vi /home/ubuntu/kafka/config/zookeeper.properties
+Copy the below configuration
+---------------------------------------
+# the location to store the in-memory database snapshots and, unless specified otherwise, the transaction log of updates to the database.
+dataDir=/data/zookeeper
+# the port at which the clients will connect
+clientPort=2181
+# disable the per-ip limit on the number of connections since this is a non-production config
+maxClientCnxns=0
+# the basic time unit in milliseconds used by ZooKeeper. It is used to do heartbeats and the minimum session timeout will be twice the tickTime.
+tickTime=2000
+# The number of ticks that the initial synchronization phase can take
+initLimit=10
+# The number of ticks that can pass between
+# sending a request and getting an acknowledgement
+syncLimit=5
+# zoo servers
+# these hostnames such as `zookeeper-1` come from the /etc/hosts file
+server.1=zookeeper1:2888:3888
+server.2=zookeeper2:2888:3888
+server.3=zookeeper3:2888:3888
+
+-----------------------------------------
+
+On all three nodes
+sudo service zookeeper start
+
+Then test in all three nodes for connectivity
+nc -vz zookeeper1 2181
+You should get success message from all three nodes
+nc -vz zookeeper2 2181
+You should get success message from all three nodes
+nc -vz zookeeper3 2181
+You should get success message from all three nodes
+
+
+Then test node's stat on all three nodes
+echo "stat" | nc localhost 2181 | echo
+--This should tell two are the followers and one node is the leader
+
+That's it !! Zookeeper quorum is setup
+
+----------------------------------------------
+To setup web tools
+
+Start an AWS T2 Micro Ubuntu instance
+
+sudo apt-get update
+
+# Install packages to allow apt to use a repository over HTTPS:
+sudo apt-get install -y \
+    apt-transport-https \
+    ca-certificates \
+    curl \
+    software-properties-common
+
+# Add Docker’s official GPG key:
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+# set up the stable repository.
+sudo add-apt-repository \
+   "deb [arch=amd64] https://download.docker.com/linux/ubuntu \
+   $(lsb_release -cs) \
+   stable"
+
+# install docker
+sudo apt-get update
+sudo apt-get install -y docker-ce docker-compose
+
+# give ubuntu permissions to execute docker
+sudo usermod -aG docker $(whoami)
+# log out
+exit
+# log back in
+
+# make sure docker is working
+docker run hello-world
+
+# Add hosts entries (mocking DNS) - put relevant IPs here
+echo "172.31.9.1 kafka1
+172.31.9.1 zookeeper1
+172.31.19.230 kafka2
+172.31.19.230 zookeeper2
+172.31.35.20 kafka3
+172.31.35.20 zookeeper3" | sudo tee --append /etc/hosts
+
+nc -zv zookeeper1 2181
+this should return success
+
+Now let us get the docker container up and running
+
+vi zoonavigator-docker-compose.yml
+copy the below lines
+version: '2'
+
+services:
+  # https://github.com/elkozmon/zoonavigator
+  web:
+    image: elkozmon/zoonavigator-web:latest
+    container_name: zoonavigator-web
+    network_mode: host
+    environment:
+      API_HOST: "localhost"
+      API_PORT: 9001
+      SERVER_HTTP_PORT: 8001
+    depends_on:
+     - api
+    restart: always
+  api:
+    image: elkozmon/zoonavigator-api:latest
+    container_name: zoonavigator-api
+    network_mode: host
+    environment:
+      SERVER_HTTP_PORT: 9001
+    restart: always
+--------------------------------------------------
+then run below command to start 
+docker-compose -f zoonavigator-docker-compose.yml up -d
+
+then run to check 
+docker ps
+
+Then go to web browser 
+<public ip>:8001
+--you should see zookeeper folders
+
+
+----------------------------------------------------
+Installing Kafka
+----------------------------------------------------
+
+----------------------------------------------------
+Got to AWS and create three volumn with 2 GB each, one in each AZs
+----------------------------------------------------
+
+attach it to server 1, 2, 3 respectively
+
+On the security group open up the following ports 
+9092 to 172.31.0.0/16
+9092 to your laptop ip
+
+Then let us format and mount ebs volume on all three nodes
+lsblk
+file -s /dev/xvdf
+
+# Note on Kafka: it's better to format volumes as xfs:
+# https://kafka.apache.org/documentation/#filesystems
+# Install packages to mount as xfs
+apt-get install -y xfsprogs
+
+# create a partition
+fdisk /dev/xvdf
+
+# format as xfs
+mkfs.xfs -f /dev/xvdf
+
+# create kafka directory
+mkdir /data/kafka
+# mount volume
+mount -t xfs /dev/xvdf /data/kafka
+# add permissions to kafka directory
+chown -R ubuntu:ubuntu /data/kafka
+# check it's working
+df -h /data/kafka
+
+# EBS Automount On Reboot
+cp /etc/fstab /etc/fstab.bak # backup
+echo '/dev/xvdf /data/kafka xfs defaults 0 0' >> /etc/fstab
+
+# reboot to test actions
+reboot
+sudo service zookeeper start
+
+----------------------------------
+-- Setting up a single node Kafka
+----------------------------------
+# Add file limits configs - allow to open 100,000 file descriptors
+echo "* hard nofile 100000
+* soft nofile 100000" | sudo tee --append /etc/security/limits.conf
+
+# reboot for the file limit to be taken into account
+sudo reboot
+sudo service zookeeper start
+
+sudo chown -R ubuntu:ubuntu /data/kafka
+
+# edit kafka configuration
+rm config/server.properties
+vi config/server.properties
+copy the following lines
+---------------------------------------------
+############################# Server Basics #############################
+
+# The id of the broker. This must be set to a unique integer for each broker.
+broker.id=1
+# change your.host.name by your machine's IP or hostname
+advertised.listeners=PLAINTEXT://kafka1:9092
+
+# Switch to enable topic deletion or not, default value is false
+delete.topic.enable=true
+
+############################# Log Basics #############################
+
+# A comma seperated list of directories under which to store log files
+log.dirs=/data/kafka
+
+# The default number of log partitions per topic. More partitions allow greater
+# parallelism for consumption, but this will also result in more files across
+# the brokers.
+num.partitions=8
+# we will have 3 brokers so the default replication factor should be 2 or 3
+default.replication.factor=3
+# number of ISR to have in order to minimize data loss
+min.insync.replicas=2
+
+############################# Log Retention Policy #############################
+
+# The minimum age of a log file to be eligible for deletion due to age
+# this will delete data after a week
+log.retention.hours=168
+
+# The maximum size of a log segment file. When this size is reached a new log segment will be created.
+log.segment.bytes=1073741824
+
+# The interval at which log segments are checked to see if they can be deleted according
+# to the retention policies
+log.retention.check.interval.ms=300000
+
+############################# Zookeeper #############################
+
+# Zookeeper connection string (see zookeeper docs for details).
+# This is a comma separated host:port pairs, each corresponding to a zk
+# server. e.g. "127.0.0.1:3000,127.0.0.1:3001,127.0.0.1:3002".
+# You can also append an optional chroot string to the urls to specify the
+# root directory for all kafka znodes.
+zookeeper.connect=zookeeper1:2181,zookeeper2:2181,zookeeper3:2181/kafka
+
+# Timeout in ms for connecting to zookeeper
+zookeeper.connection.timeout.ms=6000
+
+
+############################## Other ##################################
+# I recommend you set this to false in production.
+# We'll keep it as true for the course
+auto.create.topics.enable=true
+---------------------------------------------------
+bin/kafka-server-start.sh config/server.properties
+
+make sure Kafka Server 1 is up message 
+control C
+
+Let is make it as a service
+# Install Kafka boot scripts
+sudo vi /etc/init.d/kafka
+copy the following lines
+------------------------------------------
+#!/bin/bash
+#/etc/init.d/kafka
+DAEMON_PATH=/home/ubuntu/kafka/bin
+DAEMON_NAME=kafka
+# Check that networking is up.
+#[ ${NETWORKING} = "no" ] && exit 0
+
+PATH=$PATH:$DAEMON_PATH
+
+# See how we were called.
+case "$1" in
+  start)
+        # Start daemon.
+        pid=`ps ax | grep -i 'kafka.Kafka' | grep -v grep | awk '{print $1}'`
+        if [ -n "$pid" ]
+          then
+            echo "Kafka is already running"
+        else
+          echo "Starting $DAEMON_NAME"
+          $DAEMON_PATH/kafka-server-start.sh -daemon /home/ubuntu/kafka/config/server.properties
+        fi
+        ;;
+  stop)
+        echo "Shutting down $DAEMON_NAME"
+        $DAEMON_PATH/kafka-server-stop.sh
+        ;;
+  restart)
+        $0 stop
+        sleep 2
+        $0 start
+        ;;
+  status)
+        pid=`ps ax | grep -i 'kafka.Kafka' | grep -v grep | awk '{print $1}'`
+        if [ -n "$pid" ]
+          then
+          echo "Kafka is Running as PID: $pid"
+        else
+          echo "Kafka is not Running"
+        fi
+        ;;
+  *)
+        echo "Usage: $0 {start|stop|restart|status}"
+        exit 1
+esac
+
+exit 0
+
+------------------------------------------
+sudo chmod +x /etc/init.d/kafka
+sudo chown root:root /etc/init.d/kafka
+# you can safely ignore the warning
+sudo update-rc.d kafka defaults
+
+# start kafka
+sudo service kafka start
+# verify it's working
+nc -vz localhost 9092
+# look at the server logs
+cat /home/ubuntu/kafka/logs/server.log
+
+test the server with new topic
+# create a topic
+bin/kafka-topics.sh --zookeeper zookeeper1:2181/kafka --create --topic first_topic --replication-factor 1 --partitions 3
+# produce data to the topic
+bin/kafka-console-producer.sh --broker-list kafka1:9092 --topic first_topic
+hi
+hello
+(exit)
+# read that data
+bin/kafka-console-consumer.sh --bootstrap-server kafka1:9092 --topic first_topic --from-beginning
+# list kafka topics
+bin/kafka-topics.sh --zookeeper zookeeper1:2181/kafka --list
+
+Note: Ran into min in sync replica to 2 issue, since we have only one server we should set this to 1, bounce the server and then try the topic, it will work
+
+-------------------------------
+-- Multi Node Kafka setup
+-------------------------------
+
+change advertised listeners to kafka2 and 3 respectively on other nodes
+
+change broker id to 2 and 3 in the server.properties file
+create the init.d files
+and permissions
+and start it as a service and test it
+
+go back to the first node and change the in-sync-replica to 2
+
+Go to zoonavigator and see the kafka broker list, you should three
+
+
+-----------------------------------
+Install Kafka Manager
+-----------------------------------
+# make sure you can access the zookeeper endpoints
+nc -vz zookeeper1 2181
+nc -vz zookeeper2 2181
+nc -vz zookeeper3 2181
+
+# make sure you can access the kafka endpoints
+nc -vz kafka1 9092
+nc -vz kafka2 9092
+nc -vz kafka3 9092
+
+# copy the kafka-manager-docker-compose.yml file
+vi kafka-manager-docker-compose.yml
+copy the following content
+---------
+version: '2'
+
+services:
+  # https://github.com/yahoo/kafka-manager
+  kafka-manager:
+    image: qnib/plain-kafka-manager
+    network_mode: host
+    environment:
+      ZOOKEEPER_HOSTS: "zookeeper1:2181,zookeeper2:2181,zookeeper3:2181"
+      APPLICATION_SECRET: change_me_please
+    restart: always
+
+---------
+
+# launch it
+docker-compose -f kafka-manager-docker-compose.yml up -d
+
+and test it by going to server public IP:9000
+then add cluster
+provide a name
+provide all three Zookeeper nodes with /kafka
+try to save it, it will error out...
+provide 2 for the min parameter and add it
+and save it
+
+Now you can open up the cluster and see the topic and do maintenance on it
+
+----------------------------------------------
+Now Install
+-- Kafka Topic UI
+-- Confluent REST Proxy
+-- Confluent Schema Registry
+----------------------------------------------
+
+Create yml file named kafka-topic-ui-docker-compose.yml in the webtool server
+
+copy the below content 
+--------
+version: '2'
+
+services:
+  # https://github.com/confluentinc/schema-registry
+  confluent-schema-registry:
+    image: confluentinc/cp-schema-registry:3.2.1
+    network_mode: host
+    environment:
+      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper1:2181,zookeeper2:2181,zookeeper3:2181/kafka
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+      # please replace this setting by the IP of your web tools server
+      SCHEMA_REGISTRY_HOST_NAME: "13.59.202.76"
+    restart: always
+
+  # https://github.com/confluentinc/kafka-rest
+  confluent-rest-proxy:
+    image: confluentinc/cp-kafka-rest:3.2.1
+    network_mode: host
+    environment:
+      KAFKA_REST_BOOTSTRAP_SERVERS: kafka1:9092,kafka2:9092,kafka3:9092
+      KAFKA_REST_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2181,zookeeper3:2181/kafka
+      KAFKA_REST_LISTENERS: http://0.0.0.0:8082/
+      KAFKA_REST_SCHEMA_REGISTRY_URL: http://localhost:8081/
+      # please replace this setting by the IP of your web tools server
+      KAFKA_REST_HOST_NAME: "13.59.202.76"
+    depends_on:
+      - confluent-schema-registry
+    restart: always
+
+  # https://github.com/Landoop/kafka-topics-ui
+  kafka-topics-ui:
+    image: landoop/kafka-topics-ui:0.9.2
+    network_mode: host
+    environment:
+      KAFKA_REST_PROXY_URL: http://localhost:8082
+      PROXY: "TRUE"
+    depends_on:
+      - confluent-rest-proxy
+    restart: always
+--------
+
+Run 
+docker-compose -f  kafka-topic-ui-docker-compose.yml up -d
+
+test it by connecting to the server with 8000 port, you should see your topics
