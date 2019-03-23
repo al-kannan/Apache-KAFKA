@@ -1,0 +1,4 @@
+[0m[[0m[31merror[0m] [0m[0m/home/ubuntu/sbt/Apache-KAFKA/producer_high_throughput/src/main/java/ProducerDemo.java:25:1: cannot find symbol[0m
+[0m[[0m[31merror[0m] [0m[0m  symbol:   method toSring(int)[0m
+[0m[[0m[31merror[0m] [0m[0m  location: class java.lang.Integer[0m
+[0m[[0m[31merror[0m] [0m[0m        properties.setProperty(ProducerConfig.BATCH_SIZE_CONFIG, Integer.toSring(32*1024));[0m

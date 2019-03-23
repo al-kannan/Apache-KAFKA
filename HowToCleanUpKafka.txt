@@ -1,0 +1,4 @@
+To remove all topics and start over do the following :
+- Go the /data/kafka directory where kafka topics are kept and do a rm -rf ./*
+- Go to zookeeper Navigator and remove kafka folder completely
+- start the kafka, you will see new set of files populated in /data/kafka folder and zookeeper should have kafka folder back with no non system topics
