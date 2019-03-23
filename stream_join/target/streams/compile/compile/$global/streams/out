@@ -1,2 +1,16 @@
-[0m[[0m[0minfo[0m] [0m[0m/home/ubuntu/sbt/Apache-KAFKA/stream_example/src/main/java/streamexample.java: /home/ubuntu/sbt/Apache-KAFKA/stream_example/src/main/java/streamexample.java uses unchecked or unsafe operations.[0m
-[0m[[0m[0minfo[0m] [0m[0m/home/ubuntu/sbt/Apache-KAFKA/stream_example/src/main/java/streamexample.java: Recompile with -Xlint:unchecked for details.[0m
+[0m[[0m[31merror[0m] [0m[0m/home/ubuntu/sbt/Apache-KAFKA/stream_join/src/main/java/streamjoin.java:4:1: cannot find symbol[0m
+[0m[[0m[31merror[0m] [0m[0m  symbol:   class StreamsBuilder[0m
+[0m[[0m[31merror[0m] [0m[0m  location: package org.apache.kafka.streams[0m
+[0m[[0m[31merror[0m] [0m[0mimport org.apache.kafka.streams.StreamsBuilder;[0m
+[0m[[0m[31merror[0m] [0m[0m/home/ubuntu/sbt/Apache-KAFKA/stream_join/src/main/java/streamjoin.java:21:1: cannot find symbol[0m
+[0m[[0m[31merror[0m] [0m[0m  symbol:   class StreamsBuilder[0m
+[0m[[0m[31merror[0m] [0m[0m  location: class streamjoin[0m
+[0m[[0m[31merror[0m] [0m[0m        StreamsBuilder builder = new StreamsBuilder();[0m
+[0m[[0m[31merror[0m] [0m[0m/home/ubuntu/sbt/Apache-KAFKA/stream_join/src/main/java/streamjoin.java:21:1: cannot find symbol[0m
+[0m[[0m[31merror[0m] [0m[0m  symbol:   class StreamsBuilder[0m
+[0m[[0m[31merror[0m] [0m[0m  location: class streamjoin[0m
+[0m[[0m[31merror[0m] [0m[0m        StreamsBuilder builder = new StreamsBuilder();[0m
+[0m[[0m[31merror[0m] [0m[0m/home/ubuntu/sbt/Apache-KAFKA/stream_join/src/main/java/streamjoin.java:41:1: cannot find symbol[0m
+[0m[[0m[31merror[0m] [0m[0m  symbol:   method localThreadsMetadata()[0m
+[0m[[0m[31merror[0m] [0m[0m  location: variable streams of type org.apache.kafka.streams.KafkaStreams[0m
+[0m[[0m[31merror[0m] [0m[0m        streams.localThreadsMetadata().forEach(data -> System.out.println(data));[0m

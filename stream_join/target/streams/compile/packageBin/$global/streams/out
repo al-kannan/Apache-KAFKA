@@ -1,1 +1,7 @@
-[0m[[0m[0mdebug[0m] [0m[0mJar uptodate: /home/ubuntu/sbt/Apache-KAFKA/stream_example/target/scala-2.12/kafkaproject_2.12-1.0.jar[0m
+[0m[[0m[0minfo[0m] [0m[0mPackaging /home/ubuntu/sbt/Apache-KAFKA/stream_join/target/scala-2.12/kafkaproject_2.12-1.0.jar ...[0m
+[0m[[0m[0mdebug[0m] [0m[0mInput file mappings:[0m
+[0m[[0m[0mdebug[0m] [0m[0m	streamexample.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/ubuntu/sbt/Apache-KAFKA/stream_join/target/scala-2.12/classes/streamexample.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	streamjoin.class[0m
+[0m[[0m[0mdebug[0m] [0m[0m	  /home/ubuntu/sbt/Apache-KAFKA/stream_join/target/scala-2.12/classes/streamjoin.class[0m
+[0m[[0m[0minfo[0m] [0m[0mDone packaging.[0m
